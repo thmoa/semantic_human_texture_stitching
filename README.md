@@ -2,6 +2,14 @@
 
 This repository contains texture stitching code corresponding to the paper **Detailed Human Avatars from Monocular Video**.
 
+## Installation
+
+```
+pip install -r requirements.txt
+```
+
+Download and install [pyGCO](https://github.com/Borda/pyGCO).
+
 ## Usage
 
 We provide sample scripts and data. All scripts output usage information when executed without parameters.
