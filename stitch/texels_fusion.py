@@ -43,8 +43,8 @@ class Stitcher:
 
     def stich(self, im0, im1, unaries0, unaries1, labels0, labels1, pairwise_mask, segmentation):
 
-        gc = gco.gco()
-        gc.createGeneralGraph(self.tex_res ** 2, 2, True)
+        gc = gco.GCO()
+        gc.create_general_graph(self.tex_res ** 2, 2, True)
         gc.set_data_cost(np.dstack((unaries0, unaries1)).reshape(-1, 2))
 
         edges_w = self._rgb_grad(im0, im1, labels0, labels1, pairwise_mask, segmentation)
