@@ -103,8 +103,8 @@ def main(unwrap_dir, segm_out_file, gmm_out_file):
     edges_to = np.r_[v_edges_to, h_edges_to, s_edges_to]
     edges_w = np.r_[np.ones_like(v_edges_from), np.ones_like(h_edges_from), np.ones_like(s_edges_from)]
 
-    gc = gco.gco()
-    gc.createGeneralGraph(1000 ** 2, pairwise.shape[0], True)
+    gc = gco.GCO()
+    gc.create_general_graph(1000 ** 2, pairwise.shape[0], True)
     gc.set_data_cost(unaries.reshape(1000 ** 2, pairwise.shape[0]))
 
     gc.set_all_neighbors(edges_from, edges_to, edges_w)
