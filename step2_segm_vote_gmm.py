@@ -16,6 +16,14 @@ from sklearn.mixture import GaussianMixture
 
 
 def edges_seams(seams, tex_res, edge_idx):
+    """
+    Calculate edges of the edges.
+
+    Args:
+        seams: (todo): write your description
+        tex_res: (todo): write your description
+        edge_idx: (str): write your description
+    """
     edges = np.zeros((0, 2), dtype=np.int32)
 
     for _, e0, _, e1 in seams:
@@ -37,6 +45,14 @@ def edges_seams(seams, tex_res, edge_idx):
 
 
 def main(unwrap_dir, segm_out_file, gmm_out_file):
+    """
+    Main function.
+
+    Args:
+        unwrap_dir: (str): write your description
+        segm_out_file: (str): write your description
+        gmm_out_file: (str): write your description
+    """
     iso_files = np.array(sorted(glob(os.path.join(unwrap_dir, '*_unwrap.jpg'))))
     segm_files = np.array(sorted(glob(os.path.join(unwrap_dir, '*_segm.png'))))
     vis_files = np.array(sorted(glob(os.path.join(unwrap_dir, '*_visibility.jpg'))))

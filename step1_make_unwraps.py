@@ -17,6 +17,15 @@ from tex.texture import TextureData
 
 
 def main(data_file, frame_dir, segm_dir, out):
+    """
+    Main function.
+
+    Args:
+        data_file: (str): write your description
+        frame_dir: (str): write your description
+        segm_dir: (str): write your description
+        out: (array): write your description
+    """
     data = pkl.load(open(data_file, 'rb'))
 
     segm_files = np.array(sorted(glob(os.path.join(segm_dir, '*.png')) + glob(os.path.join(segm_dir, '*.jpg'))))

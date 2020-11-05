@@ -74,6 +74,12 @@ LABEL_COMP[0, 0] = 1.
 
 
 def read_segmentation(file):
+    """
+    Read segmentation from file.
+
+    Args:
+        file: (str): write your description
+    """
     segm = cv2.imread(file)[:, :, ::-1]
 
     segm[np.all(segm == LABELS_FULL['Sunglasses'], axis=2)] = LABELS_REDUCED['Face']
@@ -87,6 +93,12 @@ def read_segmentation(file):
     return segm
 
 def to_ids(segm):
+    """
+    Convert a sequence of segment ids.
+
+    Args:
+        segm: (todo): write your description
+    """
     ids = np.zeros(segm.shape[:2], dtype=np.uint8)
     i = 0
 

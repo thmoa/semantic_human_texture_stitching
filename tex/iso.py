@@ -12,6 +12,18 @@ GL_NEAREST = 0x2600
 
 class Isomapper():
     def __init__(self, vt, ft, tex_res, bgcolor=np.zeros(3)):
+        """
+        Initialize the image
+
+        Args:
+            self: (todo): write your description
+            vt: (int): write your description
+            ft: (todo): write your description
+            tex_res: (todo): write your description
+            bgcolor: (str): write your description
+            np: (todo): write your description
+            zeros: (bool): write your description
+        """
         vt3d = np.dstack((vt[:, 0] - 0.5, 1 - vt[:, 1] - 0.5, np.zeros(vt.shape[0])))[0]
         ortho = OrthoProjectPoints(rt=np.zeros(3), t=np.zeros(3), near=-1, far=1, left=-0.5, right=0.5, bottom=-0.5,
                                    top=0.5, width=tex_res, height=tex_res)
@@ -24,6 +36,18 @@ class Isomapper():
         self.iso_mask = np.array(self.rn_vis.r)
 
     def render(self, frame, proj_v, f, visible_faces=None, inpaint=True, inpaint_segments=None):
+        """
+        Renders the image.
+
+        Args:
+            self: (todo): write your description
+            frame: (todo): write your description
+            proj_v: (todo): write your description
+            f: (todo): write your description
+            visible_faces: (todo): write your description
+            inpaint: (todo): write your description
+            inpaint_segments: (todo): write your description
+        """
         h, w, _ = np.atleast_3d(frame).shape
         v2d = proj_v.r
         v2d_as_vt = np.dstack((v2d[:, 0] / w, 1 - v2d[:, 1] / h))[0]

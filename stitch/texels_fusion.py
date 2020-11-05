@@ -20,6 +20,16 @@ from opendr.topology import get_faces_per_edge
 class Stitcher:
 
     def __init__(self, seams, tex_res, mask, edge_idx_file='assets/basicModel_edge_idx_1000.pkl'):
+        """
+        Init the edges from the edges
+
+        Args:
+            self: (todo): write your description
+            seams: (array): write your description
+            tex_res: (todo): write your description
+            mask: (array): write your description
+            edge_idx_file: (str): write your description
+        """
         self.tex_res = tex_res
         self.seams = seams
         self.edge_idx = pkl.load(open(edge_idx_file, 'rb'))
@@ -42,6 +52,20 @@ class Stitcher:
         self.edges_to = np.r_[v_edges_to, h_edges_to, self.s_edges_to]
 
     def stich(self, im0, im1, unaries0, unaries1, labels0, labels1, pairwise_mask, segmentation):
+        """
+        Perform a pair of segmentation.
+
+        Args:
+            self: (todo): write your description
+            im0: (int): write your description
+            im1: (int): write your description
+            unaries0: (list): write your description
+            unaries1: (todo): write your description
+            labels0: (str): write your description
+            labels1: (str): write your description
+            pairwise_mask: (bool): write your description
+            segmentation: (array): write your description
+        """
 
         gc = gco.GCO()
         gc.create_general_graph(self.tex_res ** 2, 2, True)
@@ -69,6 +93,12 @@ class Stitcher:
         return result, labels
 
     def _edges_seams(self):
+        """
+        A list of edges representing the edges of edges.
+
+        Args:
+            self: (todo): write your description
+        """
         edges = np.zeros((0, 2), dtype=np.int32)
 
         for _, e0, _, e1 in self.seams:
@@ -89,6 +119,18 @@ class Stitcher:
         return edges[:, 0], edges[:, 1]
 
     def _rgb_grad(self, im0, im1, labels0, labels1, pairwise_mask, segmentation):
+        """
+        Return the gradient of the gradients.
+
+        Args:
+            self: (todo): write your description
+            im0: (array): write your description
+            im1: (int): write your description
+            labels0: (str): write your description
+            labels1: (str): write your description
+            pairwise_mask: (bool): write your description
+            segmentation: (todo): write your description
+        """
         gray0 = color.rgb2gray(im0) * pairwise_mask
         gray1 = color.rgb2gray(im1) * pairwise_mask
 

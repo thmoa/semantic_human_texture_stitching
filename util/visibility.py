@@ -14,12 +14,29 @@ from render.camera import OrthoProjectPoints
 
 class VisibilityChecker:
     def __init__(self, w, h, f):
+        """
+        Initialize the h ( f )
+
+        Args:
+            self: (todo): write your description
+            w: (int): write your description
+            h: (int): write your description
+            f: (int): write your description
+        """
         self.w = w
         self.h = h
         self.f = f
         self.rn_d = DepthRenderer(frustum={'near': 0.1, 'far': 10., 'width': w, 'height': h}, f=f)
 
     def vertex_visibility(self, camera, mask=None):
+        """
+        Finds all vertex vertices in the camera.
+
+        Args:
+            self: (todo): write your description
+            camera: (todo): write your description
+            mask: (array): write your description
+        """
         cam3d = ProjectPoints3D(**{k: getattr(camera, k) for k in camera.dterms if hasattr(camera, k)})
 
         in_viewport = np.logical_and(
@@ -45,11 +62,26 @@ class VisibilityChecker:
         return visible
 
     def face_visibility(self, camera, mask=None):
+        """
+        Return the face of the face.
+
+        Args:
+            self: (todo): write your description
+            camera: (todo): write your description
+            mask: (array): write your description
+        """
         v_vis = self.vertex_visibility(camera, mask)
 
         return np.min(v_vis[self.f], axis=1)
 
     def vertex_visibility_angle(self, camera):
+        """
+        Return the angle of a camera and camera is the camera.
+
+        Args:
+            self: (todo): write your description
+            camera: (todo): write your description
+        """
         n = VertNormals(camera.v, self.f)
         v_cam = camera.v.r.dot(cv2.Rodrigues(camera.rt.r)[0]) + camera.t.r
         n_cam = n.r.dot(cv2.Rodrigues(camera.rt.r)[0])
@@ -57,6 +89,13 @@ class VisibilityChecker:
         return np.sum(v_cam / (np.linalg.norm(v_cam, axis=1).reshape(-1, 1)) * -1 * n_cam, axis=1)
 
     def face_visibility_angle(self, camera):
+        """
+        Calculate the camera angle.
+
+        Args:
+            self: (todo): write your description
+            camera: (todo): write your description
+        """
         v_cam = camera.v.r.dot(cv2.Rodrigues(camera.rt.r)[0]) + camera.t.r
         f_cam = v_cam[self.f]
         f_norm = np.cross(f_cam[:, 0] - f_cam[:, 1], f_cam[:, 0] - f_cam[:, 2], axisa=1, axisb=1)
@@ -68,6 +107,16 @@ class VisibilityChecker:
 
 class VisibilityRenderer:
     def __init__(self, vt, ft, tex_res, f):
+        """
+        Initialize image
+
+        Args:
+            self: (todo): write your description
+            vt: (int): write your description
+            ft: (todo): write your description
+            tex_res: (todo): write your description
+            f: (int): write your description
+        """
         ortho = OrthoProjectPoints(rt=np.zeros(3), t=np.zeros(3), near=-1, far=1, left=-0.5, right=0.5, bottom=-0.5,
                                    top=0.5, width=tex_res, height=tex_res)
         vt3d = np.dstack((vt[:, 0] - 0.5, 1 - vt[:, 1] - 0.5, np.zeros(vt.shape[0])))[0]
@@ -77,6 +126,13 @@ class VisibilityRenderer:
                                        num_channels=1)
 
     def render(self, vertex_visibility):
+        """
+        Renders the vertex as a vertex.
+
+        Args:
+            self: (todo): write your description
+            vertex_visibility: (array): write your description
+        """
         vc = vertex_visibility.reshape(-1, 1)
         vc = np.hstack((vc, vc, vc))
         self.rn.set(vc=vc[self.f].reshape(-1, 3))
@@ -84,5 +140,11 @@ class VisibilityRenderer:
         return np.array(self.rn.r)
 
     def mask(self):
+        """
+        Return a 2d array.
+
+        Args:
+            self: (todo): write your description
+        """
         self.rn.set(vc=np.ones_like(self.rn.v))
         return np.array(self.rn.r)
