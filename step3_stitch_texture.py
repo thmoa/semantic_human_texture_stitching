@@ -15,6 +15,16 @@ from tex.texture import Texture
 
 
 def main(unwrap_dir, segm_template_file, gmm_file, out_file, num_iter):
+    """
+    Main function.
+
+    Args:
+        unwrap_dir: (str): write your description
+        segm_template_file: (str): write your description
+        gmm_file: (str): write your description
+        out_file: (str): write your description
+        num_iter: (int): write your description
+    """
     iso_files = np.array(sorted(glob(os.path.join(unwrap_dir, '*_unwrap.jpg'))))
     vis_files = np.array(sorted(glob(os.path.join(unwrap_dir, '*_visibility.jpg'))))
 

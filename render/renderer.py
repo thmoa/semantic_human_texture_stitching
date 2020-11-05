@@ -21,27 +21,64 @@ class OrthoBaseRenderer(BaseRenderer):
 
     @property
     def v(self):
+        """
+        Returns the vor of this vor.
+
+        Args:
+            self: (todo): write your description
+        """
         return self.ortho.v
 
     @v.setter
     def v(self, newval):
+        """
+        Return a new value
+
+        Args:
+            self: (todo): write your description
+            newval: (todo): write your description
+        """
         self.ortho.v = newval
 
     @depends_on('f', 'ortho', 'overdraw')
     def barycentric_image(self):
+        """
+        : class : class : bary.
+
+        Args:
+            self: (todo): write your description
+        """
         return super(OrthoBaseRenderer, self).barycentric_image
 
     @depends_on(terms+dterms)
     def boundaryid_image(self):
+        """
+        Returns a bounding box
+
+        Args:
+            self: (todo): write your description
+        """
         self._call_on_changed()
         return draw_boundaryid_image(self.glb, self.v.r, self.f, self.vpe, self.fpe, self.ortho)
 
     @depends_on('f', 'ortho', 'overdraw')
     def visibility_image(self):
+        """
+        Return the visibility.
+
+        Args:
+            self: (todo): write your description
+        """
         return super(OrthoBaseRenderer, self).visibility_image
 
     @depends_on('f', 'ortho')
     def edge_visibility_image(self):
+        """
+        Returns the edge edge of the edge.
+
+        Args:
+            self: (todo): write your description
+        """
         self._call_on_changed()
         return draw_edge_visibility(self.glb, self.v.r, self.vpe, self.f)
 
@@ -51,12 +88,32 @@ class OrthoColoredRenderer(OrthoBaseRenderer, ColoredRenderer):
     dterms = 'vc', 'ortho', 'bgcolor'
 
     def compute_r(self):
+        """
+        Compute the color_r_image_image_image.
+
+        Args:
+            self: (todo): write your description
+        """
         return self.color_image
 
     def compute_dr_wrt(self, wrt):
+        """
+        Compute the wrt wrt. rrt.
+
+        Args:
+            self: (todo): write your description
+            wrt: (array): write your description
+        """
         raise NotImplementedError
 
     def on_changed(self, which):
+        """
+        Called when the view is changed
+
+        Args:
+            self: (todo): write your description
+            which: (todo): write your description
+        """
         if 'ortho' in which:
             w = self.ortho.width
             h = self.ortho.height
@@ -85,19 +142,43 @@ class OrthoColoredRenderer(OrthoBaseRenderer, ColoredRenderer):
 
     @depends_on('f', 'ortho', 'vc')
     def boundarycolor_image(self):
+        """
+        The bounding bounding image.
+
+        Args:
+            self: (todo): write your description
+        """
         return self.draw_boundarycolor_image(with_vertex_colors=True)
 
     @depends_on('f', 'ortho')
     def boundary_images(self):
+        """
+        Draw a bounding of the bounding image
+
+        Args:
+            self: (todo): write your description
+        """
         self._call_on_changed()
         return draw_boundary_images(self.glb, self.v.r, self.f, self.vpe, self.fpe, self.ortho)
 
     @depends_on(terms+dterms)
     def color_image(self):
+        """
+        The colorimage.
+
+        Args:
+            self: (todo): write your description
+        """
         return super(OrthoColoredRenderer, self).color_image
 
     @property
     def shape(self):
+        """
+        Return the shape of the image.
+
+        Args:
+            self: (todo): write your description
+        """
         return (self.ortho.height, self.ortho.width, 3)
 
 
@@ -106,9 +187,23 @@ class OrthoTexturedRenderer(OrthoColoredRenderer, TexturedRenderer):
     dterms = 'vc', 'ortho', 'bgcolor', 'texture_image', 'vt'
 
     def compute_dr_wrt(self, wrt):
+        """
+        Compute the wrt wrt. rrt.
+
+        Args:
+            self: (todo): write your description
+            wrt: (array): write your description
+        """
         raise NotImplementedError
 
     def on_changed(self, which):
+        """
+        Handle a texture changed.
+
+        Args:
+            self: (todo): write your description
+            which: (todo): write your description
+        """
         OrthoColoredRenderer.on_changed(self, which)
 
         # have to redo if ortho changes, b/c ortho triggers new context
@@ -128,11 +223,25 @@ class OrthoTexturedRenderer(OrthoColoredRenderer, TexturedRenderer):
             gl.GenerateMipmap(GL_TEXTURE_2D)
 
     def release_textures(self):
+        """
+        Release all texture numbers.
+
+        Args:
+            self: (todo): write your description
+        """
         if hasattr(self, 'textureID'):
             arr = np.asarray(np.array([self.textureID]), np.uint32)
             self.glf.DeleteTextures(arr)
 
     def texture_mapping_on(self, gl, with_vertex_colors):
+        """
+        Set a texture on a texture.
+
+        Args:
+            self: (todo): write your description
+            gl: (todo): write your description
+            with_vertex_colors: (bool): write your description
+        """
         gl.Enable(GL_TEXTURE_2D)
         gl.BindTexture(GL_TEXTURE_2D, self.textureID)
         gl.TexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR)
@@ -142,24 +251,54 @@ class OrthoTexturedRenderer(OrthoColoredRenderer, TexturedRenderer):
 
     @depends_on(dterms+terms)
     def boundaryid_image(self):
+        """
+        Return the bounding box of the image.
+
+        Args:
+            self: (todo): write your description
+        """
         return super(OrthoTexturedRenderer, self).boundaryid_image
 
     @depends_on(terms+dterms)
     def color_image(self):
+        """
+        The color image.
+
+        Args:
+            self: (todo): write your description
+        """
         self.glf.BindTexture(GL_TEXTURE_2D, self.textureID)
         return super(OrthoTexturedRenderer, self).color_image
 
     @depends_on(terms+dterms)
     def boundarycolor_image(self):
+        """
+        The image boundaries.
+
+        Args:
+            self: (todo): write your description
+        """
         self.glf.BindTexture(GL_TEXTURE_2D, self.textureID)
         return super(OrthoTexturedRenderer, self).boundarycolor_image
 
     @property
     def shape(self):
+        """
+        Return the shape of the image.
+
+        Args:
+            self: (todo): write your description
+        """
         return (self.ortho.height, self.ortho.width, 3)
 
     @depends_on('vt', 'ft')
     def mesh_tex_coords(self):
+        """
+        Return the mesh coordinates of the mesh
+
+        Args:
+            self: (todo): write your description
+        """
         ftidxs = self.ft.ravel()
         data = np.asarray(self.vt.r[ftidxs].astype(np.float32)[:, 0:2], np.float32, order='C')
         data[:, 1] = 1.0 - 1.0 * data[:, 1]
@@ -167,6 +306,19 @@ class OrthoTexturedRenderer(OrthoColoredRenderer, TexturedRenderer):
 
 
 def _setup_ortho(gl, l, r, b, t, near, far, view_matrix):
+    """
+    Setup orthogonal matrices
+
+    Args:
+        gl: (todo): write your description
+        l: (todo): write your description
+        r: (todo): write your description
+        b: (todo): write your description
+        t: (todo): write your description
+        near: (todo): write your description
+        far: (todo): write your description
+        view_matrix: (todo): write your description
+    """
     gl.MatrixMode(GL_PROJECTION)
     gl.LoadIdentity()
     gl.Ortho(l, r, t, b, near, far)  # top and bottom switched for opencv coordinate system

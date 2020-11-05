@@ -15,6 +15,17 @@ from util.labels import LABELS_REDUCED, to_ids
 
 class TextureData:
     def __init__(self, tex_res, f, vt, ft, visibility):
+        """
+        Initialize the mask.
+
+        Args:
+            self: (todo): write your description
+            tex_res: (todo): write your description
+            f: (int): write your description
+            vt: (int): write your description
+            ft: (todo): write your description
+            visibility: (float): write your description
+        """
         self.tex_res = tex_res
         self.visibility = visibility
         self.f = f
@@ -26,6 +37,16 @@ class TextureData:
         self.visibility_rn = VisibilityRenderer(vt, ft, tex_res, f)
 
     def get_data(self, frame, camera, silh, segm):
+        """
+        Get the data object.
+
+        Args:
+            self: (todo): write your description
+            frame: (todo): write your description
+            camera: (str): write your description
+            silh: (bool): write your description
+            segm: (bool): write your description
+        """
         f_vis = self.visibility.face_visibility(camera, silh)
         vis = self.visibility_rn.render(self._vis_angle(camera, silh))
 
@@ -35,6 +56,14 @@ class TextureData:
         return vis, iso, iso_segm
 
     def _vis_angle(self, camera, silh):
+        """
+        Return the angle of the camera.
+
+        Args:
+            self: (todo): write your description
+            camera: (todo): write your description
+            silh: (str): write your description
+        """
         v_vis = self.visibility.vertex_visibility(camera, silh)
         v_angle = self.visibility.vertex_visibility_angle(camera)
         v_angle[np.logical_not(v_vis)] = 0
@@ -45,6 +74,17 @@ class TextureData:
 class Texture:
 
     def __init__(self, tex_res, seams, mask, segm_template, gmm):
+        """
+        Initialize a mask
+
+        Args:
+            self: (todo): write your description
+            tex_res: (todo): write your description
+            seams: (array): write your description
+            mask: (array): write your description
+            segm_template: (todo): write your description
+            gmm: (float): write your description
+        """
         self.tex_res = tex_res
         self.mask = mask
         self.face_mask = cv2.imread('assets/tex_face_mask_1000.png', flags=cv2.IMREAD_GRAYSCALE) / 255.
@@ -65,6 +105,17 @@ class Texture:
         self.gmm_agg = None
 
     def add_iso(self, tex_current, vis, current_label, silh_err=0., inpaint=True):
+        """
+        Add a new vertex.
+
+        Args:
+            self: (todo): write your description
+            tex_current: (str): write your description
+            vis: (todo): write your description
+            current_label: (todo): write your description
+            silh_err: (todo): write your description
+            inpaint: (str): write your description
+        """
 
         if self.tex_agg is None:
             self.vis_agg = vis
@@ -128,6 +179,14 @@ class Texture:
             return self.tex_agg, self.labels_agg * self.mask
 
     def inpaint_segments(self, tex, vis):
+        """
+        Finds inpaint in the template is in the segment
+
+        Args:
+            self: (todo): write your description
+            tex: (str): write your description
+            vis: (todo): write your description
+        """
 
         if self.segm_template_id is not None:
             visible = vis < 0.95
@@ -148,6 +207,14 @@ class Texture:
         return self.inpaint(tex, vis)
 
     def inpaint(self, tex, vis):
+        """
+        Inpaint inpaint inpaint.
+
+        Args:
+            self: (todo): write your description
+            tex: (str): write your description
+            vis: (todo): write your description
+        """
 
         visible = np.float32(vis < 0.7)
         visible[self.mask < 1] = 0
@@ -158,6 +225,13 @@ class Texture:
         return tex
 
     def _grow_tex(self, tex):
+        """
+        Return a 2dil kernel.
+
+        Args:
+            self: (todo): write your description
+            tex: (str): write your description
+        """
         kernel_size = np.int(self.vis_agg.shape[1] * 0.005)
         kernel = np.ones((kernel_size, kernel_size), np.uint8)
         inpaint_area = cv2.dilate(1 - self.mask, np.ones((3, 3), dtype=np.uint8), iterations=3)
